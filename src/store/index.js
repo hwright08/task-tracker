@@ -26,7 +26,7 @@ export default new Vuex.Store({
       _.forEach(state.tasks, task => {
         if (task.endTime === '') return;
 
-        let hours = moment(task.endTime, 'YYYY-MM-DD h:m:s').diff(moment(task.startTime, 'YYYY-MM-DD h:m:s'), 'hours', true);
+        let hours = moment(task.endTime, 'YYYY-MM-DD HH:mm:ss').diff(moment(task.startTime, 'YYYY-MM-DD HH:mm:ss'), 'hours', true);
         let percent = (state.workingHours < 1 ? 0 : hours / state.workingHours) * 100;
 
         hours = hours.toFixed(2);
@@ -38,6 +38,33 @@ export default new Vuex.Store({
 
     openTask(state) {
       return _.find(state.tasks, { endTime: '' }) || null;
+    },
+
+    taskGroups(state) {
+      let groups = _.reduce(state.tasks, (groups, task) => {
+        if (task.endTime === '') return groups;
+
+        let diff = moment(task.endTime, 'YYYY-MM-DD HH:mm:ss').diff(moment(task.startTime, 'YYYY-MM-DD HH:mm:ss'), 'hours', true);
+        if (groups[task.account]) {
+          groups[task.account].hours += diff;
+          groups[task.account].percent = (groups[task.account].hours / state.workingHours) * 100
+        } else {
+          groups[task.account] = {
+            hours: diff,
+            percent: (diff / state.workingHours) * 100
+          };
+        }
+
+        return groups;
+      }, {});
+
+      // turn object into array
+      let groupArray = [];
+      _.forEach(Object.keys(groups), group => {
+        groupArray.push({ account: group, ...groups[group] });
+      });
+
+      return groupArray;
     }
   },
 
@@ -88,8 +115,9 @@ export default new Vuex.Store({
     },
 
     saveHours({ commit }, hours) {
-      commit('saveHours', hours);
-      writeLocalStorage('workingHours', hours);
+      let correctedHours = hours <= 0 ? 1 : hours;
+      commit('saveHours', correctedHours);
+      writeLocalStorage('workingHours', correctedHours);
     },
 
     addTask({ commit, state }, task) {

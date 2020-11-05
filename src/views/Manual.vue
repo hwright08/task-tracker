@@ -64,7 +64,7 @@
     hide-details
   />
 
-  <v-btn block :disabled="disabled" @click="addTask({ account, comment, ...dates })">Save Task</v-btn>
+  <v-btn block :disabled="disabled" @click="save">Save Task</v-btn>
 </div>
 </template>
 
@@ -96,7 +96,16 @@ export default {
   },
 
   methods: {
-    ...mapActions(['addTask'])
+    ...mapActions(['addTask']),
+    save() {
+      this.addTask({ account: this.account, comment: this.comment, ...this.dates });
+      this.account = '';
+      this.startDate = moment().format('YYYY-MM-DD');
+      this.startTime = '';
+      this.endDate = moment().format('YYYY-MM-DD');
+      this.endTime = '';
+      this.comment = '';
+    }
   }
 };
 </script>
