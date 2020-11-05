@@ -42,7 +42,7 @@ export default {
     if (this.openTask) {
       this.taskData = { ...this.openTask };
       this.started = true;
-      this.seconds = moment().diff(moment(this.taskData.startTime, 'YYYY-MM-DD H:m:s'), 'seconds');
+      this.seconds = moment().diff(moment(this.taskData.startTime, 'YYYY-MM-DD HH:mm:ss'), 'seconds');
       this.timer = setInterval(() => (this.seconds++), 1000);
     }
   },
@@ -65,7 +65,7 @@ export default {
     runningTime() {
       let hours = Math.floor(this.seconds / 60 / 60);
       let minutes = Math.floor((this.seconds - (hours * 60 * 60)) / 60);
-      let seconds = Math.floor(this.seconds - (minutes * 60));
+      let seconds = Math.floor(this.seconds - (hours * 60 * 60) - (minutes * 60));
 
       return `${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
     }
@@ -84,13 +84,18 @@ export default {
     },
 
     endTask() {
-      debugger;
       this.started = false;
       this.taskData.endTime = moment();
       clearInterval(this.timer);
-      this.timer = undefined;
 
       this.updateTask({ ...this.taskData });
+
+      this.taskData = {
+        account: '',
+        comment: '',
+        startTime: '',
+        endTime: ''
+      };
     }
   }
 };

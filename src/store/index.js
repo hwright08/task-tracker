@@ -24,6 +24,8 @@ export default new Vuex.Store({
     computedTasks(state) {
       let tasks = [];
       _.forEach(state.tasks, task => {
+        if (task.endTime === '') return;
+
         let hours = moment(task.endTime, 'YYYY-MM-DD h:m:s').diff(moment(task.startTime, 'YYYY-MM-DD h:m:s'), 'hours', true);
         let percent = (state.workingHours < 1 ? 0 : hours / state.workingHours) * 100;
 
@@ -91,14 +93,14 @@ export default new Vuex.Store({
     },
 
     addTask({ commit, state }, task) {
-      task.startTime = moment(task.startTime).format('YYYY-MM-DD H:m:s');
+      task.startTime = moment(task.startTime).format('YYYY-MM-DD HH:mm:ss');
       commit('addTask', task);
       writeLocalStorage(moment().format('YYYY-MM-DD'), state.tasks);
     },
 
     updateTask({ commit, state }, task) {
-      task.startTime = moment(task.startTime).format('YYYY-MM-DD H:m:s');
-      task.endTime = moment(task.endTime).format('YYYY-MM-DD H:m:s');
+      task.startTime = moment(task.startTime).format('YYYY-MM-DD HH:mm:ss');
+      task.endTime = moment(task.endTime).format('YYYY-MM-DD HH:mm:ss');
 
       commit('updateTask', task);
       writeLocalStorage(moment().format('YYYY-MM-DD'), state.tasks);

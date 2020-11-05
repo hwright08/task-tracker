@@ -28,7 +28,7 @@ import moment from 'moment';
 export default {
   filters: {
     timeOnly(date) {
-      return moment(date, 'YYYY-MM-DD H:m:s').format('h:m:s A');
+      return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm:ss A');
     }
   },
 
