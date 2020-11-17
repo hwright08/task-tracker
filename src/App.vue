@@ -6,8 +6,8 @@
       <v-btn tile text height="100%" to="/">Home</v-btn>
       <v-btn tile text height="100%" to="/auto">Auto Record</v-btn>
       <v-btn tile text height="100%" to="/manual">Manual Entry</v-btn>
-      <v-btn tile text height="100%" to="/settings">Settings</v-btn>
       <v-btn tile text height="100%" to="/history">History</v-btn>
+      <v-btn tile text height="100%" to="/settings">Settings</v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>

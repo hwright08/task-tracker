@@ -21,8 +21,9 @@
     <v-btn :disabled="!taskData.account" block @click="startTask">Start Task</v-btn>
   </div>
   <div v-else>
-    <p>Started task for {{ taskData.account }}</p>
-    <p>Time Running: {{ runningTime }}</p>
+    <h2>{{ taskData.account }}</h2>
+    <p>{{ taskData.comment }}</p>
+    <p class="font-weight-bold">Time Running: {{ runningTime }}</p>
     <v-btn block @click="endTask">End Task</v-btn>
   </div>
 
