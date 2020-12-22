@@ -21,9 +21,10 @@ export default new Vuex.Store({
   },
 
   getters: {
-    computedTasks(state) {
+    computedTasks: state => date => {
+      let dateTasks = readLocalStorage(date);
       let tasks = [];
-      _.forEach(state.tasks, task => {
+      _.forEach(dateTasks, task => {
         if (task.endTime === '') return;
 
         let hours = moment(task.endTime, 'YYYY-MM-DD HH:mm:ss').diff(moment(task.startTime, 'YYYY-MM-DD HH:mm:ss'), 'hours', true);
@@ -40,8 +41,9 @@ export default new Vuex.Store({
       return _.find(state.tasks, { endTime: '' }) || null;
     },
 
-    taskGroups(state) {
-      let groups = _.reduce(state.tasks, (groups, task) => {
+    taskGroups: state => date => {
+      let dateTasks = readLocalStorage(date);
+      let groups = _.reduce(dateTasks, (groups, task) => {
         if (task.endTime === '') return groups;
 
         let diff = moment(task.endTime, 'YYYY-MM-DD HH:mm:ss').diff(moment(task.startTime, 'YYYY-MM-DD HH:mm:ss'), 'hours', true);
@@ -69,10 +71,11 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    initialize(state) {
+    initialize(state, date = null) {
+      if (!date) date = moment().format('YYYY-MM-DD');
       state.accounts = readLocalStorage('accounts') || [];
       state.workingHours = readLocalStorage('workingHours') || 8;
-      state.tasks = readLocalStorage(moment().format('YYYY-MM-DD')) || [];
+      state.tasks = readLocalStorage(date) || [];
     },
 
     deleteAccount(state, index) {

@@ -3,8 +3,7 @@
     <v-app-bar app>
       <v-toolbar-title>Task Management</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn tile text height="100%" to="/">Home</v-btn>
-      <v-btn tile text height="100%" to="/auto">Auto Record</v-btn>
+      <v-btn tile text height="100%" to="/">Auto Record</v-btn>
       <v-btn tile text height="100%" to="/manual">Manual Entry</v-btn>
       <v-btn tile text height="100%" to="/history">History</v-btn>
       <v-btn tile text height="100%" to="/settings">Settings</v-btn>

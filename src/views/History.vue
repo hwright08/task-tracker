@@ -1,11 +1,26 @@
 <template>
 <div>
-  <h1>Today's Task History</h1>
+  <h1>
+    <v-row>
+      <v-col>Today's Task History</v-col>
+      <v-spacer></v-spacer>
+      <v-col>
+        <v-text-field
+          v-model="date"
+          label="Date"
+          type="date"
+          outlined
+          dense
+          hide-details
+        ></v-text-field>
+      </v-col>
+    </v-row>
+  </h1>
 
   <h2>Account Summary</h2>
   <v-data-table
     :headers="groupHeaders"
-    :items="taskGroups"
+    :items="taskGroups(date)"
   >
     <template #item.hours="{ item }">
       {{ item.hours | twoDecimals }}
@@ -20,7 +35,7 @@
   <h2>Task Summary</h2>
   <v-data-table
     :headers="headers"
-    :items="computedTasks"
+    :items="computedTasks(date)"
   >
     <template #item.startTime="{item}">
       {{ item.startTime | timeOnly }}
@@ -54,6 +69,7 @@ export default {
   },
 
   data: () => ({
+    date: moment().format('YYYY-MM-DD'),
     headers: [
       { value: 'account', text: 'Account' },
       { value: 'startTime', text: 'Start Time' },
@@ -73,10 +89,7 @@ export default {
   computed: {
     ...mapGetters(['computedTasks', 'taskGroups']),
     totalHours() {
-      return _.reduce(this.taskGroups, (sum, i) => {
-        let a = sum += i.hours;
-        return a;
-      }, 0);
+      return _.reduce(this.taskGroups(this.date), (sum, i) => sum + i.hours, 0);
     }
   }
 };
