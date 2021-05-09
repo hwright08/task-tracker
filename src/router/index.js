@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Auto from '../views/Auto.vue';
 
 Vue.use(VueRouter);
 
@@ -7,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "auto" */ '../views/Auto.vue')
+    component: Auto
   },
   {
     path: '/settings',
@@ -23,7 +24,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (auto.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "auto" */ '../views/Auto.vue')
+    component: Auto
   },
   {
     path: '/history',
