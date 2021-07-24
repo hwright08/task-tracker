@@ -1,32 +1,37 @@
+<style>
+  .v-application, .v-card__text {
+    color: black !important;
+  }
+</style>
+
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar app color="primary darken-3 white--text">
+      <v-toolbar-title>Task Management</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn tile text height="100%" color="white" to="/">Auto Record</v-btn>
+      <v-btn tile text height="100%" color="white" to="/manual">Manual Entry</v-btn>
+      <v-btn tile text height="100%" color="white" to="/history">History</v-btn>
+      <v-btn tile text height="100%" color="white" to="/settings">Settings</v-btn>
+    </v-app-bar>
+    <v-main class="grey lighten-4">
+      <v-container fluid>
+        <router-view />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { mapActions } from 'vuex';
 
-#nav {
-  padding: 30px;
+export default {
+  created() {
+    this.initialize();
+  },
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  methods: {
+    ...mapActions(['initialize'])
   }
-}
-</style>
+};
+</script>
