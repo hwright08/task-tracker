@@ -102,15 +102,15 @@ export default {
     endTask() {
       this.started = false;
       this.taskData.end = dayjs();
-      clearInterval(this.timer);
 
+      clearInterval(this.timer);
       this.updateTask({ ...this.taskData });
 
       this.taskData = {
         account: '',
-        comment: '',
         start: '',
-        end: ''
+        end: '',
+        comments: ''
       };
     }
   }

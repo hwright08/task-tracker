@@ -94,12 +94,12 @@ export default {
     ...mapActions(['addTask']),
     required: utils.required,
     save() {
-      this.addTask({ account: this.account, comment: this.comment, ...this.dates });
+      this.addTask({ account: this.account, comments: this.comments, ...this.dates });
       this.account = '';
       this.date = dayjs().format('YYYY-MM-DD');
       this.startTime = '';
       this.endTime = '';
-      this.comment = '';
+      this.comments = '';
     }
   }
 };

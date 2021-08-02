@@ -27,18 +27,19 @@
       </template>
 
       <template #item.hours="{ item }">
-        {{ item | hours }}
+        {{ item | hours }} ({{ taskToPercent(item) }}%)
       </template>
 
-      <template #item.percent="{ item }">
-        {{ convertToPercent(item) }}%
-      </template>
-
-      <template #group.header="{ group, headers, remove }">
-        <td class="primary white--text" :colspan="headers.length - 1">{{ group }}</td>
-        <td class="primary text-right">
-          <v-btn icon @click="remove">
-            <v-icon color="white">mdi-minus</v-icon>
+      <template #group.header="{ group, headers, toggle, items, isOpen }">
+        <td
+          class="primary py-2 body-1 white--text"
+          :colspan="headers.length - 1"
+        >
+          {{ group }} - {{ groupPercent(items) }}%
+        </td>
+        <td class="primary py-2 body-1 text-right">
+          <v-btn icon @click="toggle">
+            <v-icon color="white">{{ isOpen ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
           </v-btn>
         </td>
       </template>
@@ -77,9 +78,8 @@ export default {
       { value: 'account', text: 'Account' },
       { value: 'start', text: 'Start Time' },
       { value: 'end', text: 'End Time' },
-      { value: 'hours', text: 'Hours' },
-      { value: 'percent', text: 'Percent' },
-      { value: 'comment', text: 'Task Description' },
+      { value: 'hours', text: 'Amount' },
+      { value: 'comments', text: 'Task Description' },
     ]
   }),
 
@@ -96,10 +96,19 @@ export default {
   },
 
   methods: {
-    convertToPercent(task) {
+    convertToPercent(seconds) {
+      return ((seconds / this.totalSeconds) * 100).toFixed(2);
+    },
+    taskToPercent(task) {
       const { start, end } = task;
       const seconds = dayjs(end).diff(start, 'second');
-      return ((seconds / this.totalSeconds) * 100).toFixed(2);
+      return this.convertToPercent(seconds);
+    },
+    groupPercent(tasks) {
+      let percent = tasks.reduce((sum, t) => {
+        return sum += parseFloat(this.taskToPercent(t));
+      }, 0)
+      return percent;
     }
   }
 };

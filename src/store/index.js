@@ -22,7 +22,8 @@ export default new Vuex.Store({
   getters: {
     dailyTasks: state => date => {
       let todaysTasks = readLocalStorage(date);
-      return todaysTasks ? todaysTasks.sort((a, b) => a.start >= b.start ? 1 : -1) : [];
+      let completeTasks = todaysTasks ? todaysTasks.filter(t => !!t.end) : [];
+      return completeTasks.sort((a, b) => a.start >= b.start ? 1 : -1);
     },
 
     openTask(state) {
@@ -74,7 +75,7 @@ export default new Vuex.Store({
 
     addTask({ commit, state }, task) {
       task.start = dayjs(task.start).format('YYYY-MM-DD HH:mm:ss');
-      const maxId = Math.max(...state.tasks.map(t => t.id)) || 0;
+      const maxId = Math.max(...state.tasks.map(t => t.id), 0);
       task.id = maxId + 1;
       commit('addTask', task);
       writeLocalStorage(dayjs().format('YYYY-MM-DD'), state.tasks);
